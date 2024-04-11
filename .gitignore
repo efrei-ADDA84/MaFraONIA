@@ -1,7 +1,6 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
-*.py[cod]
-*$py.class
+*.pyc
 
 # C extensions
 *.so
@@ -123,8 +122,8 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+.dmypy.json
 dmypy.json
-dmypy.json.5
 
 # Pyre type checker
 .pyre/
@@ -134,6 +133,12 @@ dmypy.json.5
 
 # Cython debug symbols
 cython_debug/
+
+# dotenv environment variables file
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 
 # JupyterLab
 .jupyterlab-debug.log

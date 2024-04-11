@@ -8,9 +8,10 @@ WORKDIR /usr/src/app
 COPY . .
 
 # Install any needed packages specified in requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir requests
 
-# Environment variables should be passed at runtime, not defined in the Dockerfile
+# Use environment variables for configuration
+ENV OPENWEATHER_API_KEY=73798258221c6dcc94a6b4283fb75734
 
-# Run weatherFetcher.py when the container launches
-CMD ["python", "./weatherFetcher.py"]
+# Run weather_api_wrapper.py when the container launches
+CMD ["python", "./weather_api_wrapper.py"]
