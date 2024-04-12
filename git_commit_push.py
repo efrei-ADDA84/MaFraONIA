@@ -8,6 +8,11 @@ def run_command(command):
     process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, text=True)
     output, error = process.communicate()
     exit_code = process.returncode
+    if exit_code == 0:
+        logging.info(f"Successfully executed: {command}")
+    else:
+        logging.error(f"Error running command '{command}': {error}")
+        logging.error("Full error:", exc_info=True)
     return output, error, exit_code
 
 def commit_and_push_changes():
@@ -30,10 +35,7 @@ def commit_and_push_changes():
     ]
     for command in commands:
         output, error, exit_code = run_command(command)
-        if exit_code == 0:
-            logging.info(f"Successfully executed: {command}")
-        else:
-            logging.error(f"Error running command '{command}': {error}")
+        if exit_code != 0:
             break
 
 if __name__ == "__main__":
