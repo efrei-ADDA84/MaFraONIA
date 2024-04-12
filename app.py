@@ -9,7 +9,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 
 OPENWEATHER_API_KEY = os.getenv('OPENWEATHER_API_KEY', '73798258221c6dcc94a6b4283fb75734')  
 
-@app.route('/weather', methods=['GET'])
+@app.route('/', methods=['GET'])
 def fetch_weather_data():
     latitude = request.args.get('lat', default='48.8534')  
     longitude = request.args.get('lon', default='2.3488')

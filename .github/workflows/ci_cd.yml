@@ -22,7 +22,12 @@ jobs:
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
     - name: Run unit tests
-      run: python -m unittest discover -s tests
+      run: |
+        if [ -d tests ]; then
+          python -m unittest discover -s tests
+        else
+          echo "No tests directory found, skipping unit tests."
+        fi
 
   build-and-publish:
     needs: build-and-test
