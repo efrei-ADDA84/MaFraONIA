@@ -4,9 +4,9 @@ import logging
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-OPENWEATHER_API_KEY = os.getenv('OPENWEATHER_API_KEY', '73798258221c6dcc94a6b4283fb75734')
-LATITUDE = os.getenv('LATITUDE', '48.8534')
-LONGITUDE = os.getenv('LONGITUDE', '2.3488')
+OPENWEATHER_API_KEY = os.getenv('OPENWEATHER_API_KEY', '73798258221c6dcc94a6b4283fb75734')  
+LATITUDE = os.getenv('LATITUDE', '48.8534') 
+LONGITUDE = os.getenv('LONGITUDE', '2.3488')  
 
 def fetch_weather_data():
 
