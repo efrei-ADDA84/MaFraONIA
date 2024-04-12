@@ -14,7 +14,7 @@ OPENWEATHER_API_KEY = os.getenv('OPENWEATHER_API_KEY')
 
 if not OPENWEATHER_API_KEY:
     logging.error("No OpenWeather API key found. Please set the OPENWEATHER_API_KEY environment variable.")
-    exit(1)
+    raise ValueError("No OpenWeather API key found. Please set the OPENWEATHER_API_KEY environment variable.")
 
 @app.route('/', methods=['GET'])
 def fetch_weather_data():
