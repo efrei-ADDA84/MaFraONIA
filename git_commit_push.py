@@ -1,59 +1,41 @@
+import os
+import shlex
 import subprocess
 import logging
-import shlex
-
-# Set up basic logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-
 
 def run_command(command):
-    """Runs a shell command and returns the output, error and exit code."""
-    try:
-        process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, text=True)
-        output, error = process.communicate()
-        if error:
-            logging.error(f"Error running command '{command}': {error}")
-        return output, error, process.returncode
-    except Exception as e:
-        logging.error(f"Error running command '{command}': {e}", exc_info=True)
-        return None, str(e), 1
+    """Executes a system command and returns the output, error and exit code."""
+    process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, text=True)
+    output, error = process.communicate()
+    exit_code = process.returncode
+    return output, error, exit_code
 
-
-def git_status():
-    """Check for uncommitted changes in the workspace."""
-    command = "git status --porcelain"
-    output, error, exit_code = run_command(command)
-    if exit_code != 0:
-        logging.error(f"Error checking git status: {error}")
-        return False
-    if output:
-        logging.info("Uncommitted changes detected.")
-        return True
-    else:
-        logging.info("No uncommitted changes detected.")
-        return False
-
-
-def commit_and_push():
+def commit_and_push_changes():
     """Commits and pushes changes to the remote repository."""
-    user_input = input("Enter your commit message: All changes")  # INPUT_REQUIRED {Enter a meaningful commit message}
+    user_input = input("Enter your commit message: ")  
     safe_user_input = shlex.quote(user_input)
+    # Determine the current branch name dynamically
+    current_branch_command = "git rev-parse --abbrev-ref HEAD"
+    current_branch_output, current_branch_error, current_branch_exit_code = run_command(current_branch_command)
+    if current_branch_exit_code != 0:
+        logging.error(f"Error determining current branch: {current_branch_error}")
+        return
+    current_branch = current_branch_output.strip()
+    logging.info(f"Current branch is {current_branch}")
+    
     commands = [
         "git add .",
-        f"git commit -m {safe_user_input}",
-        "git push origin master"
+        f"git commit -m \"{safe_user_input}\"",
+        f"git push origin {current_branch}"
     ]
     for command in commands:
         output, error, exit_code = run_command(command)
-        if exit_code != 0:
-            logging.error(f"Error running '{command}': {error}", exc_info=True)
-            break
-        else:
+        if exit_code == 0:
             logging.info(f"Successfully executed: {command}")
-
+        else:
+            logging.error(f"Error running command '{command}': {error}")
+            break
 
 if __name__ == "__main__":
-    if git_status():
-        commit_and_push()
-    else:
-        logging.info("No changes to commit.")
+    logging.basicConfig(level=logging.INFO)
+    commit_and_push_changes()
