@@ -17,7 +17,8 @@ def run_command(command):
 
 def commit_and_push_changes():
     """Commits and pushes changes to the remote repository."""
-    user_input = input("Enter your commit message: ")  
+    print('Please enter your commit message for this commit:')  # Added line
+    user_input = input()  
     safe_user_input = shlex.quote(user_input)
     # Determine the current branch name dynamically
     current_branch_command = "git rev-parse --abbrev-ref HEAD"
