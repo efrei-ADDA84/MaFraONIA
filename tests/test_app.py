@@ -27,9 +27,9 @@ class TestApp(unittest.TestCase):
         print("Test for weather data fetch failure due to missing parameters passed.")
 
     def test_environment_variables(self):
-        self.assertTrue(os.getenv('OPENWEATHER_API_KEY'), "Environment variable for API key is not set.")
-        self.assertTrue(os.getenv('LATITUDE'), "Environment variable for latitude is not set.")
-        self.assertTrue(os.getenv('LONGITUDE'), "Environment variable for longitude is not set.")
+        self.assertTrue(os.getenv('OPENWEATHER_API_KEY'), '73798258221c6dcc94a6b4283fb75734')
+        self.assertTrue(os.getenv('LATITUDE'), '48.8534')
+        self.assertTrue(os.getenv('LONGITUDE'), '2.3488')
         print("Environment variables test passed.")
 
 if __name__ == '__main__':
