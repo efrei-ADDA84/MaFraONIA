@@ -31,14 +31,38 @@ The architecture leverages Python 3.8 and Flask as the web framework, with Docke
 
 ## Automating Git Operations
 
-To automate the process of committing changes and pushing them to the GitHub repository, you can use the `git_commit_push.py` script included in the project. Here's how to use it:
+The `git_commit_push.py` script simplifies the process of committing changes to your local repository and pushing them to GitHub. This automation script is particularly useful for streamlining your development workflow. Here's how to use it:
 
-1. Open a terminal and navigate to the project directory.
-2. Run the script with the command: `python git_commit_push.py`
-3. When prompted, enter your commit message and press Enter.
-4. The script will add all changes, commit them with your message, and push the commit to the remote repository.
+### How to Use the git_commit_push.py Script
 
-Ensure you have configured your Git credentials correctly on your system to avoid any authentication issues during the push operation.
+1. **Prepare Your Changes**: Before running the script, make sure all your changes are ready and saved.
+
+2. **Run the Script**: Open a terminal in your project's root directory and execute the script by running:
+   ```
+   python git_commit_push.py
+   ```
+
+3. **Enter Your Commit Message**: When prompted, enter a meaningful commit message that describes the changes you're making. Press Enter to continue.
+
+4. **Confirm and Push**: The script will automatically stage your changes, commit them to your local repository with the message you provided, and then push the commit to the remote repository on GitHub.
+
+5. **Verify**: To ensure your changes have been successfully pushed, visit your GitHub repository and check the recent commits.
+
+This script requires that you have configured your Git credentials correctly on your system. If you encounter any authentication issues, please verify your Git setup.
+
+### Troubleshooting
+
+- **Authentication Issues**: If the script fails to push changes due to authentication problems, ensure your Git credentials are set up correctly.
+- **Permission Denied**: Make sure `git_commit_push.py` has execution permissions. On Linux or macOS, you can set this by running:
+  ```
+  chmod +x git_commit_push.py
+  ```
+- **Missing Git Configuration**: The script assumes you have a remote named 'origin' pointing to your GitHub repository. If you haven't set this up, you can do so by running:
+  ```
+  git remote add origin https://github.com/yourusername/yourrepository.git
+  ```
+
+Remember, this script is a helpful tool to automate repetitive Git operations. It's not a substitute for understanding how Git works. Familiarize yourself with Git commands and use the script to make your workflow more efficient.
 
 ## License
 
