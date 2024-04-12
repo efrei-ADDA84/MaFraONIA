@@ -11,7 +11,10 @@ def run_command(command):
     if exit_code == 0:
         logging.info(f"Successfully executed: {command}")
     else:
-        logging.error(f"Error running command '{command}': {error}")
+        if error:
+            logging.error(f"Error running command '{command}': {error}")
+        else:
+            logging.error(f"Command '{command}' executed with exit code {exit_code} but no error message was provided.")
         logging.error("Full error:", exc_info=True)
     return output, error, exit_code
 
@@ -28,7 +31,14 @@ def commit_and_push_changes():
         return
     current_branch = current_branch_output.strip()
     logging.info(f"Current branch is {current_branch}")
-    
+
+    # Check if there are any changes to commit
+    has_changes_command = "git status --porcelain"
+    has_changes_output, has_changes_error, has_changes_exit_code = run_command(has_changes_command)
+    if not has_changes_output:
+        logging.info("No changes to commit.")
+        return
+
     commands = [
         "git add .",
         f"git commit -m \"{safe_user_input}\"",
@@ -37,7 +47,10 @@ def commit_and_push_changes():
     for command in commands:
         output, error, exit_code = run_command(command)
         if exit_code != 0:
+            logging.error(f"Failed to execute command: {command}")
             break
+        else:
+            logging.info(f"Command executed successfully: {command}")
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
