@@ -1,13 +1,20 @@
 import os
+from dotenv import load_dotenv
 import requests
 import logging
 from flask import Flask, jsonify, request
+
+load_dotenv()
 
 app = Flask(__name__)
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-OPENWEATHER_API_KEY = os.getenv('OPENWEATHER_API_KEY', '73798258221c6dcc94a6b4283fb75734')  
+OPENWEATHER_API_KEY = os.getenv('OPENWEATHER_API_KEY')  
+
+if not OPENWEATHER_API_KEY:
+    logging.error("No OpenWeather API key found. Please set the OPENWEATHER_API_KEY environment variable.")
+    exit(1)
 
 @app.route('/', methods=['GET'])
 def fetch_weather_data():

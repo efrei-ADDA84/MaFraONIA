@@ -2,6 +2,9 @@ import unittest
 import os
 from unittest.mock import patch
 from app import app
+from dotenv import load_dotenv
+
+load_dotenv()  
 
 class TestApp(unittest.TestCase):
 
@@ -27,11 +30,12 @@ class TestApp(unittest.TestCase):
         self.assertEqual(response.status_code, 400)
         print("Test for weather data fetch failure due to missing parameters passed.")
 
-    @patch.dict(os.environ, {'OPENWEATHER_API_KEY': '73798258221c6dcc94a6b4283fb75734', 'LATITUDE': '48.8534', 'LONGITUDE': '2.3488'})
     def test_environment_variables(self):
-        self.assertEqual(os.getenv('OPENWEATHER_API_KEY'), '73798258221c6dcc94a6b4283fb75734')
-        self.assertEqual(os.getenv('LATITUDE'), '48.8534')
-        self.assertEqual(os.getenv('LONGITUDE'), '2.3488')
+        api_key = os.getenv('OPENWEATHER_API_KEY')
+        self.assertIsNotNone(api_key)
+        self.assertNotEqual(api_key, 'INPUT_REQUIRED {Provide your OpenWeather API key as an environment variable}')
+        self.assertEqual(os.getenv('LATITUDE', '48.8534'), '48.8534')
+        self.assertEqual(os.getenv('LONGITUDE', '2.3488'), '2.3488')
         print("Environment variables test passed.")
 
 if __name__ == '__main__':

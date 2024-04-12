@@ -20,10 +20,10 @@ def run_command(command):
 
 def commit_and_push_changes():
     """Commits and pushes changes to the remote repository."""
-    print('Please enter your commit message for this commit:')  # Added line
+    print('Please enter your commit message for this commit:')  
     user_input = input()  
     safe_user_input = shlex.quote(user_input)
-    # Determine the current branch name dynamically
+    
     current_branch_command = "git rev-parse --abbrev-ref HEAD"
     current_branch_output, current_branch_error, current_branch_exit_code = run_command(current_branch_command)
     if current_branch_exit_code != 0:
@@ -32,7 +32,7 @@ def commit_and_push_changes():
     current_branch = current_branch_output.strip()
     logging.info(f"Current branch is {current_branch}")
 
-    # Check if there are any changes to commit
+    
     has_changes_command = "git status --porcelain"
     has_changes_output, has_changes_error, has_changes_exit_code = run_command(has_changes_command)
     if not has_changes_output:

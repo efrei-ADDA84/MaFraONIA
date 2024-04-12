@@ -4,7 +4,11 @@ import logging
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-OPENWEATHER_API_KEY = os.getenv('OPENWEATHER_API_KEY', '73798258221c6dcc94a6b4283fb75734')  
+OPENWEATHER_API_KEY = os.getenv('OPENWEATHER_API_KEY')  
+if not OPENWEATHER_API_KEY:
+    logging.error("No OpenWeather API key found. Please set the OPENWEATHER_API_KEY environment variable.")
+    exit(1)
+
 LATITUDE = os.getenv('LATITUDE', '48.8534') 
 LONGITUDE = os.getenv('LONGITUDE', '2.3488')  
 
