@@ -35,6 +35,7 @@ jobs:
           python -m unittest discover -s tests
         else
           echo "No tests directory found, skipping unit tests."
+        fi
 
   build-and-publish:
     needs: build-and-test
