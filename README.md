@@ -30,7 +30,7 @@ The project utilizes a Python-based application with Flask for the web framework
 1. Clone the repository to your local machine.
 2. Rename `.env.devopstp3` to `.env` and update `OPENWEATHER_API_KEY` with your key.
 3. Build the Docker image using `docker build -t devops_tp3:latest .`
-4. Run the container with `docker run --network host -e OPENWEATHER_API_KEY=YOUR_API_KEY devops_tp3:latest`
+4. Run the container with `docker run -p 80:80 -p 8081:8081 -e OPENWEATHER_API_KEY=YOUR_API_KEY devops_tp3:latest`
 5. Check the GitHub repository for CI/CD configurations and adjust as necessary for your environment.
 
 ## Deployment
@@ -52,7 +52,7 @@ Ensure these resources are created and configured correctly in your Azure accoun
 
 ## Prometheus Monitoring
 
-This application is configured to expose metrics that can be scraped by Prometheus at the `/metrics` endpoint. To access these metrics, navigate to `http://<host>:8080/metrics`, where `<host>` is the host or IP address where the application is running.
+This application is configured to expose metrics that can be scraped by Prometheus at the `/metrics` endpoint. To access these metrics, navigate to `http://<host>:80/metrics`, where `<host>` is the host or IP address where the application is running.
 
 ### Interpreting Metrics
 

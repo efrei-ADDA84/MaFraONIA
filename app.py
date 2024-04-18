@@ -58,5 +58,5 @@ def fetch_weather_data():
         return jsonify({"error": "An unexpected error occurred"}), 500
 
 if __name__ == "__main__":
-    start_http_server(8080)
+    start_http_server(80)
     app.run(host='0.0.0.0', port=8081, debug=True)
