@@ -59,7 +59,7 @@ jobs:
         file: ./Dockerfile
         push: true
         tags: |
-          ${{ secrets.DOCKER_USERNAME }}/devops_tp2:latest
-          ${{ secrets.DOCKER_USERNAME }}/devops_tp2:${{ github.sha }}
+          ${{ secrets.DOCKER_USERNAME }}/devops_tp3:latest
+          ${{ secrets.DOCKER_USERNAME }}/devops_tp3:${{ github.sha }}
         build-args: |
           OPENWEATHER_API_KEY=${{ secrets.OPENWEATHER_API_KEY }}

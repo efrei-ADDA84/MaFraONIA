@@ -4,7 +4,7 @@ import requests
 import logging
 from flask import Flask, jsonify, request
 
-load_dotenv()
+load_dotenv('.env.devopstp3')
 
 app = Flask(__name__)
 

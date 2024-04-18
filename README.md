@@ -1,6 +1,6 @@
-# Projet DEVOPS_TP2
+# Projet DEVOPS_TP3
 
-Ce projet, DEVOPS_TP2, est une solution complète que je fais pour récupérer et afficher les données météorologiques en utilisant l'API OpenWeather. Il encapsule une application Python, utilisant Flask comme framework web, et est conteneurisé avec Docker pour faciliter le déploiement et assurer la cohérence à travers différents environnements.
+Ce projet, DEVOPS_TP3, est une solution complète que je fais pour récupérer et afficher les données météorologiques en utilisant l'API OpenWeather. Il encapsule une application Python, utilisant Flask comme framework web, et est conteneurisé avec Docker pour faciliter le déploiement et assurer la cohérence à travers différents environnements.
 
 ## 0. Vue d'ensemble
 
@@ -28,8 +28,9 @@ J'utilise Python 3.8 et Flask comme technologies de base, avec Docker pour la co
 1. Cloner le dépôt sur ma machine locale.
 2. Naviguer jusqu'au répertoire du projet.
 3. Avant de construire l'image Docker, assurez-vous de définir la variable d'environnement `OPENWEATHER_API_KEY` avec votre clé API OpenWeather. Ceci peut être fait en suivant ces étapes :
-   - Copier le fichier `.env.devopstp2` à `.env` dans le répertoire du projet.
-   - Ouvrer le fichier `.env` et remplacez `YOUR_API_KEY` par votre véritable clé API OpenWeather. INPUT_REQUIRED {Remplacez YOUR_API_KEY par votre clé API OpenWeather}
+   - Copier le fichier `.env.devopstp3` à `.env` dans le répertoire du projet.
+   - Ouvrer le fichier `.env` et remplacez `YOUR_API_KEY` par votre véritable clé API OpenWeather. 
+   
    Pour les utilisateurs de Unix/Linux/MacOS, vous pouvez aussi exécuter la commande suivante dans votre terminal :
     ```
    export OPENWEATHER_API_KEY=YOUR_API_KEY
@@ -40,11 +41,11 @@ J'utilise Python 3.8 et Flask comme technologies de base, avec Docker pour la co
     ```
 4. Construire l'image Docker avec la commande suivante :
    ```
-   docker build -t devops_tp2:latest .
+   docker build -t devops_tp3:latest .
    ```
-5. Lancer le conteneur Docker en passant la clé API comme variable d'environnement :
+5. Lancer le conteneur Docker en passant la clé API comme variable d'environnement avec le mappage correct du port :
    ```
-   docker run --network host -e OPENWEATHER_API_KEY=YOUR_API_KEY devops_tp2:latest
+   docker run --network host -e OPENWEATHER_API_KEY=YOUR_API_KEY devops_tp3:latest
    ```
 
 ## 3. Pratiques de sécurité
@@ -54,6 +55,36 @@ Pour garantir la sécurité de l'application, je ne stocke pas de données sensi
 ## 4. Configuration de l'environnement de test
 
 Pour configurer l'environnement de test sans exposer votre clé API OpenWeather, suivez les instructions de la section 2.2 pour définir la variable d'environnement `OPENWEATHER_API_KEY` avant d'exécuter les tests. Cela garantit que vos tests peuvent s'exécuter avec les données réelles sans compromettre la sécurité de vos informations d'identification.
+
+## 5. Cloning and Setting Up the Project
+
+To clone and run this project, follow these steps:
+
+1. Clone the repository:
+
+```sh
+git clone https://github.com/YOUR_USERNAME/DEVOPS_TP3.git
+```
+
+2. Navigate into the project directory:
+
+```sh
+cd DEVOPS_TP3
+```
+
+3. Build the Docker image:
+
+```sh
+docker build -t devops_tp3:latest .
+```
+
+4. Run the Docker container:
+
+```sh
+docker run --network host -e OPENWEATHER_API_KEY=YOUR_API_KEY devops_tp3:latest
+```
+
+Replace `YOUR_USERNAME` with your GitHub username, and `YOUR_API_KEY` with your actual OpenWeather API key.
 
 ## Licence
 
