@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 import requests
 import logging
 from flask import Flask, jsonify, request
+from prometheus_client import start_http_server, Counter
 
 load_dotenv('.env.devopstp3')
 
@@ -16,8 +17,12 @@ if not OPENWEATHER_API_KEY:
     logging.error("No OpenWeather API key found. Please set the OPENWEATHER_API_KEY environment variable.")
     raise ValueError("No OpenWeather API key found. Please set the OPENWEATHER_API_KEY environment variable.")
 
+# Prometheus metrics setup
+REQUESTS = Counter('weather_requests_total', 'Total web requests for weather data')
+
 @app.route('/', methods=['GET'])
 def fetch_weather_data():
+    REQUESTS.inc()  # Increment the counter
     latitude = request.args.get('lat', default='48.8534')  
     longitude = request.args.get('lon', default='2.3488')
 
@@ -28,6 +33,8 @@ def fetch_weather_data():
     base_url = "https://api.openweathermap.org/data/2.5/weather"
     complete_url = f"{base_url}?lat={latitude}&lon={longitude}&appid={OPENWEATHER_API_KEY}"
     
+    logging.info(f"Fetching weather data with URL: {complete_url} and API Key: {OPENWEATHER_API_KEY}")  # Log the request URL and API key
+
     try:
         response = requests.get(complete_url)
         response.raise_for_status()  
@@ -51,4 +58,5 @@ def fetch_weather_data():
         return jsonify({"error": "An unexpected error occurred"}), 500
 
 if __name__ == "__main__":
+    start_http_server(8080)
     app.run(host='0.0.0.0', port=8081, debug=True)

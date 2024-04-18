@@ -50,6 +50,14 @@ This deployment process requires the following Azure resources to be configured:
 
 Ensure these resources are created and configured correctly in your Azure account. The required secrets (`AZURE_CREDENTIALS`, `ACR_LOGIN_SERVER`, and `OPENWEATHER_API_KEY`) should be stored in the GitHub repository's Secrets for the CI/CD pipeline to function properly.
 
+## Prometheus Monitoring
+
+This application is configured to expose metrics that can be scraped by Prometheus at the `/metrics` endpoint. To access these metrics, navigate to `http://<host>:8080/metrics`, where `<host>` is the host or IP address where the application is running.
+
+### Interpreting Metrics
+
+- `weather_requests_total`: This counter metric tracks the total number of requests made to the main API endpoint. Incremented each time the `/` endpoint is accessed to fetch weather data.
+
 ## License
 
 Copyright (c) 2024.
