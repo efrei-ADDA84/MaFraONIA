@@ -1,91 +1,55 @@
-# Projet DEVOPS_TP3
+# DEVOPS_TP3
 
-Ce projet, DEVOPS_TP3, est une solution complète que je fais pour récupérer et afficher les données météorologiques en utilisant l'API OpenWeather. Il encapsule une application Python, utilisant Flask comme framework web, et est conteneurisé avec Docker pour faciliter le déploiement et assurer la cohérence à travers différents environnements.
+DEVOPS_TP3 is an automation project focused on streamlining DevOps tasks for an application using Docker, GitHub, and Azure. This project aims to automate environment configuration updates, Docker image management, container deployment, and continuous integration/deployment through GitHub Actions to Azure Container Instances (ACI), with a feature for monitoring API requests using Prometheus.
 
-## 0. Vue d'ensemble
+## Overview
 
-J'utilise Python 3.8 et Flask comme technologies de base, avec Docker pour la conteneurisation. La structure de l'application comprend un fichier `.gitignore` pour le contrôle de version, un `Dockerfile` pour les configurations Docker, `weather_api_wrapper.py` pour l'interface avec l'API OpenWeather, et `app.py` pour l'application web Flask. Je gère la configuration à travers des variables d'environnement, permettant des options de déploiement flexibles.
+The project utilizes a Python-based application with Flask for the web framework, Docker for containerization, GitHub for source control and CI/CD through GitHub Actions, and Azure ACIs for deployment. The system is designed to be robust and scalable, integrating Prometheus for monitoring, thereby ensuring a comprehensive DevOps solution.
 
-## 1. Fonctionnalités
+## Features
 
-- Je récupère les données météorologiques basées sur la latitude et la longitude via l'API OpenWeather.
-- J'ai créé une application web Flask pour une interface facile et accessible.
-- J'ai conteneurisé avec Docker pour un déploiement cohérent et une scalabilité.
-- J'ai utilisé des variables d'environnement pour une configuration sécurisée et flexible.
-- J'ai mis en place une pipeline CI/CD automatisée avec GitHub Actions pour un développement et déploiement rationalisés.
+- Automated environment configuration updates.
+- Docker image creation and management.
+- Automated container deployment to Azure Container Instances.
+- Continuous Integration and Deployment with GitHub Actions.
+- API request monitoring using Prometheus.
 
-## 2. Pour commencer
+## Getting started
 
-### 2.1. Prérequis
+### Requirements
 
 - Docker
 - Python 3.8
-- Une clé API OpenWeather
+- An OpenWeather API key
 - Flask
+- A GitHub account
+- Access to Azure Container Registry (ACR) and Azure Container Instances (ACI)
 
-### 2.2. Démarrage rapide
+### Quickstart
 
-1. Cloner le dépôt sur ma machine locale.
-2. Naviguer jusqu'au répertoire du projet.
-3. Avant de construire l'image Docker, assurez-vous de définir la variable d'environnement `OPENWEATHER_API_KEY` avec votre clé API OpenWeather. Ceci peut être fait en suivant ces étapes :
-   - Copier le fichier `.env.devopstp3` à `.env` dans le répertoire du projet.
-   - Ouvrer le fichier `.env` et remplacez `YOUR_API_KEY` par votre véritable clé API OpenWeather. 
-   
-   Pour les utilisateurs de Unix/Linux/MacOS, vous pouvez aussi exécuter la commande suivante dans votre terminal :
-    ```
-   export OPENWEATHER_API_KEY=YOUR_API_KEY
-    ```
-    Ou pour les utilisateurs de Windows, utilisez :
-    ```
-   set OPENWEATHER_API_KEY=YOUR_API_KEY
-    ```
-4. Construire l'image Docker avec la commande suivante :
-   ```
-   docker build -t devops_tp3:latest .
-   ```
-5. Lancer le conteneur Docker en passant la clé API comme variable d'environnement avec le mappage correct du port :
-   ```
-   docker run --network host -e OPENWEATHER_API_KEY=YOUR_API_KEY devops_tp3:latest
-   ```
+1. Clone the repository to your local machine.
+2. Rename `.env.devopstp3` to `.env` and update `OPENWEATHER_API_KEY` with your key.
+3. Build the Docker image using `docker build -t devops_tp3:latest .`
+4. Run the container with `docker run --network host -e OPENWEATHER_API_KEY=YOUR_API_KEY devops_tp3:latest`
+5. Check the GitHub repository for CI/CD configurations and adjust as necessary for your environment.
 
-## 3. Pratiques de sécurité
+## Deployment
 
-Pour garantir la sécurité de l'application, je ne stocke pas de données sensibles telles que la clé API OpenWeather et les identifiants Docker Hub dans le code de l'application ou dans les images Docker. À la place, je recommande de les transmettre comme variables d'environnement lors de l'exécution du conteneur Docker. Cela permet de garder les informations sensibles hors du contrôle de version et des images Docker, assurant une meilleure sécurité.
+The application is deployed to Azure Container Instances (ACI) through GitHub Actions. Upon a commit to the main branch, the CI/CD pipeline automatically builds the Docker image, pushes it to Azure Container Registry (ACR), and deploys it to ACI.
 
-## 4. Configuration de l'environnement de test
+### Custom DNS Name
 
-Pour configurer l'environnement de test sans exposer votre clé API OpenWeather, suivez les instructions de la section 2.2 pour définir la variable d'environnement `OPENWEATHER_API_KEY` avant d'exécuter les tests. Cela garantit que vos tests peuvent s'exécuter avec les données réelles sans compromettre la sécurité de vos informations d'identification.
+The application is accessible via a custom DNS name following the pattern `devops-20230583.westeurope.azurecontainer.io`. This DNS name is configured during the deployment process in GitHub Actions.
 
-## 5. Cloning and Setting Up the Project
+### Azure Resources
 
-To clone and run this project, follow these steps:
+This deployment process requires the following Azure resources to be configured:
+- Azure Container Registry (ACR) to store the Docker images.
+- Azure Container Instance (ACI) for deploying and running the containerized application.
+- An Azure Resource Group where ACI will be deployed.
 
-1. Clone the repository:
+Ensure these resources are created and configured correctly in your Azure account. The required secrets (`AZURE_CREDENTIALS`, `ACR_LOGIN_SERVER`, and `OPENWEATHER_API_KEY`) should be stored in the GitHub repository's Secrets for the CI/CD pipeline to function properly.
 
-```sh
-git clone https://github.com/YOUR_USERNAME/DEVOPS_TP3.git
-```
-
-2. Navigate into the project directory:
-
-```sh
-cd DEVOPS_TP3
-```
-
-3. Build the Docker image:
-
-```sh
-docker build -t devops_tp3:latest .
-```
-
-4. Run the Docker container:
-
-```sh
-docker run --network host -e OPENWEATHER_API_KEY=YOUR_API_KEY devops_tp3:latest
-```
-
-Replace `YOUR_USERNAME` with your GitHub username, and `YOUR_API_KEY` with your actual OpenWeather API key.
-
-## Licence
+## License
 
 Copyright (c) 2024.

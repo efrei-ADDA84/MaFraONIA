@@ -46,11 +46,10 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Log in to Docker Hub
-      uses: docker/login-action@v2
+    - name: Log in to Azure Container Registry (ACR)
+      uses: azure/login@v1
       with:
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
 
     - name: Build and push Docker image
       uses: docker/build-push-action@v2
@@ -58,8 +57,30 @@ jobs:
         context: .
         file: ./Dockerfile
         push: true
-        tags: |
-          ${{ secrets.DOCKER_USERNAME }}/devops_tp3:latest
-          ${{ secrets.DOCKER_USERNAME }}/devops_tp3:${{ github.sha }}
-        build-args: |
-          OPENWEATHER_API_KEY=${{ secrets.OPENWEATHER_API_KEY }}
+        tags: ${{ secrets.ACR_LOGIN_SERVER }}/${{ secrets.ACR_REPOSITORY_NAME }}:${{ github.sha }}
+        build-args: OPENWEATHER_API_KEY=${{ secrets.OPENWEATHER_API_KEY }}
+
+  deploy-to-aci:
+    needs: build-and-publish
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Login to Azure
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: Deploy to Azure Container Instance (ACI)
+      run: |
+        az container create \
+          --resource-group myResourceGroup \
+          --name devops-${{ secrets.IDENTIFIANT_EFREI }} \
+          --image ${{ secrets.ACR_LOGIN_SERVER }}/devops_tp3:latest \
+          --dns-name-label devops-${{ secrets.IDENTIFIANT_EFREI }} \
+          --location westeurope \
+          --environment-variables OPENWEATHER_API_KEY=${{ secrets.OPENWEATHER_API_KEY }} 
+
+    - name: Logout from Azure
+      run: az logout
