@@ -65,7 +65,7 @@ jobs:
         context: .
         file: ./Dockerfile
         push: true
-        tags: ${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ secrets.IDENTIFIANT_EFREI }}/devops_tp3:${{ github.sha }}
+        tags: ${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ secrets.IDENTIFIANT_EFREI }}:${{ github.sha }}
         build-args: OPENWEATHER_API_KEY=${{ secrets.OPENWEATHER_API_KEY }}
 
   deploy-to-aci:
