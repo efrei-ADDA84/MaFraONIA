@@ -31,6 +31,9 @@ L'application utilise une pile basée sur Python, intégrant Flask pour la gesti
 2. **Construisez l'image Docker** : Exécutez `docker build -t devops_tp3:latest .` pour créer une image Docker nommée `devops_tp3:latest`.
 3. **Exécutez le conteneur Docker** : Utilisez `docker run --network host -e OPENWEATHER_API_KEY=VOTRE_CLÉ_API devops_tp3:latest` pour démarrer l'application. Remplacez `VOTRE_CLÉ_API` par votre véritable clé API OpenWeather.
 4. **Exécutez API App** : Utilisez cette commande `python app.py`
+    ```
+   http://127.0.0.1/
+    ```
 5. **Configuration de GitHub Actions** : Configurez GitHub Actions en mettant en place des flux de travail dans `.github/workflows/ci_cd.yml` pour automatiser les processus CI/CD. Cela inclut le linting, les tests, la construction et le déploiement de l'application.
 6. **Intégration continue et déploiement** : Le pipeline CI/CD automatise le processus d'intégration des changements, de construction de l'image Docker et de son déploiement sur les instances de conteneurs Azure (ACI).
     ```

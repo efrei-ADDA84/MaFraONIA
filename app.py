@@ -66,10 +66,31 @@ def fetch_weather_data():
 
 @app.route('/metrics', methods=['GET'])
 def metrics():
-    REQUESTS.inc()  # Ensure metrics endpoint increments the counter
     data = generate_latest()
     return Response(data, mimetype=CONTENT_TYPE_LATEST)
 
+@app.route('/health', methods=['GET'])
+def health_check():
+    return jsonify({"status": "up"}), 200
+
+def start_prometheus_server():
+    from socket import error as SocketError
+    import errno
+
+    port = 8080
+    while True:
+        try:
+            start_http_server(port)
+            logging.info(f"Prometheus metrics server started on port {port}")
+            break
+        except SocketError as e:
+            if e.errno == errno.EADDRINUSE:
+                logging.info(f"Port {port} is already in use. Trying next port.")
+                port += 1
+            else:
+                logging.error("An error occurred while starting Prometheus metrics server:", exc_info=True)
+                raise
+
 if __name__ == "__main__":
-    start_http_server(8080)
+    start_prometheus_server()
     app.run(host='0.0.0.0', port=80, debug=True)
