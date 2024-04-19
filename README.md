@@ -1,4 +1,4 @@
-"# DEVOPS_TP3
+# DEVOPS_TP3
 
 DEVOPS_TP3 est conçu pour automatiser les processus DevOps d'une application, en utilisant les technologies Docker, GitHub et Azure. Ce projet se concentre sur l'amélioration des configurations d'environnement, la gestion des images Docker, le déploiement automatisé des conteneurs et l'intégration des flux de travail de l'intégration continue et du déploiement continu avec GitHub Actions. De plus, il inclut Prometheus pour surveiller les requêtes API, offrant une solution complète pour le déploiement d'applications et l'observabilité.
 
@@ -30,16 +30,12 @@ L'application utilise une pile basée sur Python, intégrant Flask pour la gesti
 1. **Clonez le dépôt** et naviguez vers le répertoire du projet.
 2. **Construisez l'image Docker** : Exécutez `docker build -t devops_tp3:latest .` pour créer une image Docker nommée `devops_tp3:latest`.
 3. **Exécutez le conteneur Docker** : Utilisez `docker run --network host -e OPENWEATHER_API_KEY=VOTRE_CLÉ_API devops_tp3:latest` pour démarrer l'application. Remplacez `VOTRE_CLÉ_API` par votre véritable clé API OpenWeather.
-4. **Exécutez API App** : Utilisez cette commande `python app.py`
-    ```
-   http://127.0.0.1/
-    ```
-5. **Configuration de GitHub Actions** : Configurez GitHub Actions en mettant en place des flux de travail dans `.github/workflows/ci_cd.yml` pour automatiser les processus CI/CD. Cela inclut le linting, les tests, la construction et le déploiement de l'application.
-6. **Intégration continue et déploiement** : Le pipeline CI/CD automatise le processus d'intégration des changements, de construction de l'image Docker et de son déploiement sur les instances de conteneurs Azure (ACI).
+4. **Configuration de GitHub Actions** : Configurez GitHub Actions en mettant en place des flux de travail dans `.github/workflows/ci_cd.yml` pour automatiser les processus CI/CD. Cela inclut le linting, les tests, la construction et le déploiement de l'application.
+5. **Intégration continue et déploiement** : Le pipeline CI/CD automatise le processus d'intégration des changements, de construction de l'image Docker et de son déploiement sur les instances de conteneurs Azure (ACI).
     ```
    python git_commit_push.py
     ```
-7. **Surveillance avec Prometheus** : Accédez au point de terminaison `/metrics` pour voir les métriques de Prometheus, qui suivent entre autres les comptages des requêtes API.
+6. **Surveillance avec Prometheus** : Accédez au point de terminaison `/metrics` pour voir les métriques de Prometheus, qui suivent entre autres les comptages des requêtes API.
     ```
    http://localhost/metrics
     ```
