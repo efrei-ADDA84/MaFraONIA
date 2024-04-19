@@ -8,10 +8,10 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-ENV LATITUDE=48.8534 
+# Set default latitude and longitude values. These can be overridden at runtime.
+ENV LATITUDE=48.8534
+ENV LONGITUDE=2.3488
 
-ENV LONGITUDE=2.3488 
-
-EXPOSE 80 8081
+EXPOSE 80
 
 CMD ["python", "./app.py"]

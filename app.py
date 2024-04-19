@@ -1,9 +1,16 @@
 import os
-from dotenv import load_dotenv
 import requests
 import logging
-from flask import Flask, jsonify, request
 from prometheus_client import start_http_server, Counter
+
+try:
+    from flask import Flask, jsonify, request
+    from dotenv import load_dotenv
+except ImportError as e:
+    logging.basicConfig(level=logging.ERROR)
+    logging.error("Failed to import Flask or dotenv. Please ensure they are installed and compatible with Python 3.12.")
+    logging.error("Error details: %s", e)
+    raise
 
 load_dotenv('.env.devopstp3')
 
@@ -58,5 +65,5 @@ def fetch_weather_data():
         return jsonify({"error": "An unexpected error occurred"}), 500
 
 if __name__ == "__main__":
-    start_http_server(80)
-    app.run(host='0.0.0.0', port=8081, debug=True)
+    start_http_server(8080)
+    app.run(host='0.0.0.0', port=80, debug=True)
