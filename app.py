@@ -92,5 +92,5 @@ def start_prometheus_server():
                 raise
 
 if __name__ == "__main__":
-    start_prometheus_server(8080)
+    start_prometheus_server()
     app.run(host='0.0.0.0', port=80, debug=True)
