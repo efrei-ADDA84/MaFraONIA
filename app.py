@@ -1,10 +1,10 @@
 import os
 import requests
 import logging
-from prometheus_client import start_http_server, Counter
+from prometheus_client import start_http_server, Counter, generate_latest, CONTENT_TYPE_LATEST
 
 try:
-    from flask import Flask, jsonify, request
+    from flask import Flask, jsonify, request, Response
     from dotenv import load_dotenv
 except ImportError as e:
     logging.basicConfig(level=logging.ERROR)
@@ -63,6 +63,12 @@ def fetch_weather_data():
     except Exception as err:
         logging.error("An error occurred: %s", err, exc_info=True)
         return jsonify({"error": "An unexpected error occurred"}), 500
+
+@app.route('/metrics', methods=['GET'])
+def metrics():
+    REQUESTS.inc()  # Ensure metrics endpoint increments the counter
+    data = generate_latest()
+    return Response(data, mimetype=CONTENT_TYPE_LATEST)
 
 if __name__ == "__main__":
     start_http_server(8080)
