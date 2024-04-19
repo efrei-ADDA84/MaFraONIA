@@ -84,7 +84,7 @@ jobs:
       uses: azure/aci-deploy@v1
       with:
         resource-group: ${{ secrets.RESOURCE_GROUP }}
-        dns-name-label: devops-${{ secrets.IDENTIFIANT_EFREI }}
+        dns-name-label: ${{ secrets.IDENTIFIANT_EFREI }}
         image: ${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ secrets.IDENTIFIANT_EFREI }}/devops_tp3:${{ github.sha }}
         name: ${{ secrets.IDENTIFIANT_EFREI }}
         registry-login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
@@ -92,5 +92,3 @@ jobs:
         registry-password: ${{ secrets.REGISTRY_PASSWORD }}
         environment-variables: OPENWEATHER_API_KEY=${{ secrets.OPENWEATHER_API_KEY }}
         location: westeurope
-      
-
