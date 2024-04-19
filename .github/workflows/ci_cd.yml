@@ -17,66 +17,78 @@ jobs:
     needs: hadolint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - name: Set up Python 3.8
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.8'
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-      - name: Set environment variables for tests
-        run: echo "OPENWEATHER_API_KEY=${{ secrets.OPENWEATHER_API_KEY }}" >> $GITHUB_ENV
-      - name: Run unit tests
-        run: |
-          if [ -d tests ]; then
-            python -m unittest discover -s tests
-          else
-            echo "No tests directory found, skipping unit tests."
+    - uses: actions/checkout@v3
+
+    - name: Set up Python 3.8
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.8'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+    - name: Set environment variables for tests
+      run: echo "OPENWEATHER_API_KEY=${{ secrets.OPENWEATHER_API_KEY }}" >> $GITHUB_ENV
+
+    - name: Run unit tests
+      run: |
+        if [ -d tests ]; then
+          python -m unittest discover -s tests
+        else
+          echo "No tests directory found, skipping unit tests."
+        fi
 
   build-and-publish:
     needs: build-and-test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - name: Log in to Azure Container Registry (ACR)
-        uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-      - name: Log in to Azure Container Registry (ACR)
-        uses: azure/docker-login@v1
-        with:
-          login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
-          username: ${{ secrets.REGISTRY_USERNAME }}
-          password: ${{ secrets.REGISTRY_PASSWORD }}
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v2
-        with:
-          context: .
-          file: ./Dockerfile
-          push: true
-          tags: ${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ secrets.IDENTIFIANT_EFREI }}/devops_tp3:${{ github.sha }}
-          build-args: OPENWEATHER_API_KEY=${{ secrets.OPENWEATHER_API_KEY }}
+    - uses: actions/checkout@v3
+
+    - name: Log in to Azure Container Registry (ACR)
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: Log in to Azure Container Registry (ACR)
+      uses: azure/docker-login@v1
+      with:
+        login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+        username: ${{ secrets.REGISTRY_USERNAME }}
+        password: ${{ secrets.REGISTRY_PASSWORD }}
+
+
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v2
+      with:
+        context: .
+        file: ./Dockerfile
+        push: true
+        tags: ${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ secrets.IDENTIFIANT_EFREI }}/devops_tp3:${{ github.sha }}
+        build-args: OPENWEATHER_API_KEY=${{ secrets.OPENWEATHER_API_KEY }}
 
   deploy-to-aci:
     needs: build-and-publish
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - name: Login to Azure
-        uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-      - name: Deploy to Azure Container Instances (ACI)
-        uses: azure/aci-deploy@v1
-        with:
-          resource-group: ${{ secrets.RESOURCE_GROUP }}
-          dns-name-label: devops-${{ secrets.IDENTIFIANT_EFREI }}-${{ github.run_number }}
-          image: ${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ secrets.IDENTIFIANT_EFREI }}/devops_tp3:${{ github.sha }}
-          name: devops-${{ secrets.IDENTIFIANT_EFREI }}
-          registry-login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
-          registry-username: ${{ secrets.REGISTRY_USERNAME }}
-          registry-password: ${{ secrets.REGISTRY_PASSWORD }}
-          environment-variables: OPENWEATHER_API_KEY=${{ secrets.OPENWEATHER_API_KEY }}
-          location: westeurope
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Login to Azure
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: Deploy to Azure Container Instances (ACI)
+      uses: azure/aci-deploy@v1
+      with:
+        resource-group: ${{ secrets.RESOURCE_GROUP }}
+        dns-name-label: devops-${{ secrets.IDENTIFIANT_EFREI }}
+        image: ${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ secrets.IDENTIFIANT_EFREI }}/devops_tp3:${{ github.sha }}
+        name: ${{ secrets.IDENTIFIANT_EFREI }}
+        registry-login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+        registry-username: ${{ secrets.REGISTRY_USERNAME }}
+        registry-password: ${{ secrets.REGISTRY_PASSWORD }}
+        environment-variables: OPENWEATHER_API_KEY=${{ secrets.OPENWEATHER_API_KEY }}
+        location: westeurope
