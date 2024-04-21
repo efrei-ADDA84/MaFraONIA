@@ -1,56 +1,51 @@
 provider "azurerm" {
   features {}
+  subscription_id            = var.subscription_id
   skip_provider_registration = true
 }
 
-resource "azurerm_resource_group" "rg" {
-  name     = var.resource_group_name
-  location = "west europe"
+data "azurerm_resource_group" "existing_rg" {
+  name = var.resource_group_name
 }
 
-resource "azurerm_virtual_network" "vnet" {
+data "azurerm_virtual_network" "existing_vnet" {
   name                = var.network_name
-  address_space       = var.address_space
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
+  resource_group_name = data.azurerm_resource_group.existing_rg.name
 }
 
-resource "azurerm_subnet" "subnet" {
+data "azurerm_subnet" "existing_subnet" {
   name                 = var.subnet_name
-  resource_group_name  = azurerm_resource_group.rg.name
-  virtual_network_name = azurerm_virtual_network.vnet.name
-  address_prefixes     = var.subnet_prefixes
+  virtual_network_name = data.azurerm_virtual_network.existing_vnet.name
+  resource_group_name  = data.azurerm_resource_group.existing_rg.name
 }
 
 resource "azurerm_public_ip" "vm_public_ip" {
   name                = "devops-${var.IDENTIFIANT_EFREI}-public-ip"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
+  location            = data.azurerm_resource_group.existing_rg.location
+  resource_group_name = data.azurerm_resource_group.existing_rg.name
   allocation_method   = "Dynamic"
 }
 
 resource "azurerm_network_interface" "vm_nic" {
   name                = "devops-${var.IDENTIFIANT_EFREI}-nic"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
+  location            = data.azurerm_resource_group.existing_rg.location
+  resource_group_name = data.azurerm_resource_group.existing_rg.name
 
   ip_configuration {
     name                          = "internal"
-    subnet_id                     = azurerm_subnet.subnet.id
+    subnet_id                     = data.azurerm_subnet.existing_subnet.id
     private_ip_address_allocation = "Dynamic"
     public_ip_address_id          = azurerm_public_ip.vm_public_ip.id
   }
 }
 
 resource "azurerm_linux_virtual_machine" "devops_vm" {
-  name                = "devops-${var.IDENTIFIANT_EFREI}"
-  resource_group_name = azurerm_resource_group.rg.name
-  location            = azurerm_resource_group.rg.location
-  size                = var.vm_size
-  admin_username      = "devops"
-  network_interface_ids = [
-    azurerm_network_interface.vm_nic.id,
-  ]
+  name                  = "devops-${var.IDENTIFIANT_EFREI}"
+  resource_group_name   = data.azurerm_resource_group.existing_rg.name
+  location              = data.azurerm_resource_group.existing_rg.location
+  size                  = var.vm_size
+  admin_username        = "devops"
+  network_interface_ids = [azurerm_network_interface.vm_nic.id]
 
   os_disk {
     caching              = "ReadWrite"

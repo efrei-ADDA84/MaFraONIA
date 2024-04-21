@@ -54,11 +54,16 @@ variable "vm_offer" {
 variable "vm_sku" {
   type        = string
   description = "SKU of the VM image"
-  default     = "22.04-LTS"
+  default     = "18.04-LTS"
 }
 
 variable "vm_version" {
   type        = string
   description = "Version of the VM image"
   default     = "latest"
+}
+
+variable "subscription_id" {
+  type        = string
+  description = "Azure subscription ID"
 }

@@ -71,6 +71,47 @@ terraform destroy
 
 Ensure you understand the impact of this command as it will remove all cloud resources defined in the Terraform configurations.
 
+## Azure Authentication for Terraform
+
+To allow Terraform to manage resources in your Azure account, you need to authenticate using environment variables. This method ensures that sensitive credentials are not hardcoded in your project files.
+
+### Setting Environment Variables for Authentication
+
+Before running Terraform commands, set the following environment variables with your Azure account details:
+
+- `ARM_SUBSCRIPTION_ID`: Your Azure Subscription ID.
+- `ARM_CLIENT_ID`: Your Azure Service Principal Client ID.
+- `ARM_CLIENT_SECRET`: Your Azure Service Principal Client Secret.
+- `ARM_TENANT_ID`: Your Azure Tenant ID.
+
+You can set these variables in your terminal session or configure them in a `.env` file that you source before running Terraform commands.
+
+### Creating a Service Principal
+
+1. Install Azure CLI on your machine.
+2. Login to Azure CLI using `az login`.
+3. Create a service principal using the following command:
+
+```bash
+az ad sp create-for-rbac --name "TerraformSP" --role="Contributor" --scopes="/subscriptions/YOUR_SUBSCRIPTION_ID"
+```
+
+Replace `YOUR_SUBSCRIPTION_ID` with your actual Azure subscription ID.
+
+### Configuring Terraform with Environment Variables
+
+Ensure that the environment variables mentioned above are set before running `terraform init` or `terraform apply`. Terraform will automatically use these variables for authentication.
+
+### Finding Your Tenant ID
+
+To find your Azure tenant ID, follow these steps:
+
+1. Log in to the Azure portal.
+2. Navigate to Azure Active Directory.
+3. Look for the Directory ID under the Properties section. This is your tenant ID.
+
+Ensure that the service principal has permissions to the subscription and resources you intend to manage with Terraform.
+
 ### License
 
 Copyright (c) 2024.
