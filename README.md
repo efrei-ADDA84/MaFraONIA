@@ -1,117 +1,113 @@
 # DEVOPS_TP4
 
-This project focuses on leveraging Azure Virtual Machine (VM) management through Terraform for DevOps purposes. The goal is to automate the creation, configuration, and management of an Azure VM, specifically tailored for DevOps applications, including setting up Docker and ensuring secure SSH access.
+Ce projet se concentre sur l'utilisation de la gestion des machines virtuelles (VM) Azure à travers Terraform à des fins DevOps. L'objectif est d'automatiser la création, la configuration et la gestion d'une VM Azure, spécialement adaptée pour les applications DevOps, incluant la configuration de Docker et la sécurisation de l'accès SSH.
 
-## Overview
+## Vue d'ensemble
 
-DEVOPS_TP4 utilizes Terraform for Infrastructure as Code (IaC) to automate the provisioning of Azure resources. This includes the creation of a virtual network, a subnet within this network, and a VM configured with Ubuntu 22.04. It showcases the use of Terraform to automate cloud infrastructure tasks, which is crucial for scalable and efficient DevOps practices.
+DEVOPS_TP4 utilise Terraform pour l'Infrastructure en tant que Code (IaC) afin d'automatiser la mise en place des ressources Azure. Cela comprend la création d'un réseau virtuel, d'un sous-réseau dans ce réseau, et d'une VM configurée avec Ubuntu 22.04. Il démontre l'utilisation de Terraform pour automatiser les tâches d'infrastructure cloud, ce qui est crucial pour des pratiques DevOps scalables et efficaces.
 
-The architecture revolves around Azure services, with Terraform scripts to set up and manage these services. The project is integrated with GitHub for version control and utilizes Azure CLI for authentication purposes.
+L'architecture s'articule autour des services Azure, avec des scripts Terraform pour configurer et gérer ces services. Le projet est intégré avec GitHub pour le contrôle de version et utilise Azure CLI à des fins d'authentification.
 
-## Features
+## Fonctionnalités
 
-- **Automated VM Provisioning:** Create a Standard_D2s_v3 VM in the 'west europe' region with Ubuntu 22.04.
-- **SSH Access:** Secure SSH configuration using generated SSH keys for accessing the VM.
-- **Docker Installation:** A startup script is employed to automatically install Docker on the VM, readying it for container-based applications.
-- **Dynamic Configuration:** Terraform variables and GitHub secrets allow for customizable and repeatable deployments.
+- **Provisionnement Automatisé de VM :** Création d'une VM Standard_D2s_v3 dans la région 'ouest europe' avec Ubuntu 22.04.
+- **Accès SSH :** Configuration SSH sécurisée utilisant des clés SSH générées pour accéder à la VM.
+- **Installation de Docker :** Un script de démarrage est utilisé pour installer automatiquement Docker sur la VM, la préparant pour des applications basées sur des conteneurs.
+- **Configuration Dynamique :** Les variables Terraform et les secrets GitHub permettent des déploiements personnalisables et reproductibles.
 
-## Getting Started
+## Pour Commencer
 
-### Requirements
+### Prérequis
 
 - Terraform
 - Azure CLI
 - Git
 
-### Quickstart
+### Démarrage Rapide
 
-1. Clone the repository to your local machine.
-2. Navigate to the project directory and run `terraform init` to initialize Terraform.
-3. Generate an SSH key pair if you haven't already.
-4. Execute `terraform apply` to create the Azure resources. Provide a unique `IDENTIFIANT_EFREI` when prompted.
-5. Connect to the VM using SSH with the generated private key.
+1. Clonez le dépôt sur votre machine locale.
+2. Naviguez vers le répertoire du projet et exécutez `terraform init` pour initialiser Terraform.
+3. Générez une paire de clés SSH si vous n'en avez pas déjà une.
+4. Exécutez `terraform apply` pour créer les ressources Azure. Fournissez un `IDENTIFIANT_EFREI` unique lorsqu'il vous sera demandé.
+5. Connectez-vous à la VM en utilisant SSH avec la clé privée générée.
 
-## Development and Operations
+## Développement et Opérations
 
-### Version Control
+### Contrôle de Version
 
-The Terraform configurations for this project are version-controlled using Git with the repository hosted on GitHub. To contribute or modify the infrastructure setup, follow the steps below:
+Les configurations Terraform pour ce projet sont contrôlées par version en utilisant Git, avec le dépôt hébergé sur GitHub. Pour contribuer ou modifier la configuration de l'infrastructure, suivez les étapes ci-dessous :
 
-### Cloning the Repository
+### Clonage du Dépôt
 
-1. Ensure you have Git installed on your machine.
-2. Clone the repository using the following command:
+1. Assurez-vous que Git est installé sur votre machine.
+2. Clonez le dépôt en utilisant la commande suivante :
 
 ```bash
 git clone https://github.com/efrei-ADDA84/MaFraONIA.git
 cd MaFraONIA
 ```
 
-### Terraform Workflow
+### Flux de Travail Terraform
 
-1. **Terraform Initialization** - Before applying any changes, initialize the Terraform workspace by running:
+1. **Initialisation de Terraform** - Avant d'appliquer des modifications, initialisez l'espace de travail Terraform en exécutant :
 
 ```bash
 terraform init
 ```
+2. **Formatage Terraform** - Formatez correctement le code Terraform en exécutant :
 
-2. **Applying Configuration** - To create or update the infrastructure, execute:
+```bash
+terraform fmt
+```
+
+2. **Application de la Configuration** - Pour créer ou mettre à jour l'infrastructure, exécutez :
 
 ```bash
 terraform apply
 ```
 
-When prompted, enter a unique `IDENTIFIANT_EFREI` or configure it as an environment variable.
+Lorsqu'il vous sera demandé, entrez un `IDENTIFIANT_EFREI` unique avec `var.subscription_id` ou configurez-le comme variable d'environnement.
 
-3. **Destroying Infrastructure** - To remove all resources managed by Terraform, run:
+3. **Destruction de l'Infrastructure** - Pour supprimer toutes les ressources gérées par Terraform, exécutez :
 
 ```bash
 terraform destroy
 ```
 
-Ensure you understand the impact of this command as it will remove all cloud resources defined in the Terraform configurations.
+Assurez-vous de comprendre l'impact de cette commande car elle supprimera toutes les ressources cloud définies dans les configurations Terraform.
 
-## Azure Authentication for Terraform
+## Authentification Azure pour Terraform
 
-To allow Terraform to manage resources in your Azure account, you need to authenticate using environment variables. This method ensures that sensitive credentials are not hardcoded in your project files.
+Pour permettre à Terraform de gérer les ressources dans votre compte Azure, vous devez créer un principal de service et configurer Terraform avec ses identifiants.
 
-### Setting Environment Variables for Authentication
+### Création d'un Principal de Service
 
-Before running Terraform commands, set the following environment variables with your Azure account details:
-
-- `ARM_SUBSCRIPTION_ID`: Your Azure Subscription ID.
-- `ARM_CLIENT_ID`: Your Azure Service Principal Client ID.
-- `ARM_CLIENT_SECRET`: Your Azure Service Principal Client Secret.
-- `ARM_TENANT_ID`: Your Azure Tenant ID.
-
-You can set these variables in your terminal session or configure them in a `.env` file that you source before running Terraform commands.
-
-### Creating a Service Principal
-
-1. Install Azure CLI on your machine.
-2. Login to Azure CLI using `az login`.
-3. Create a service principal using the following command:
+1. Installez Azure CLI sur votre machine.
+2. Connectez-vous à Azure CLI en utilisant `az login`.
+3. Créez un principal de service en utilisant la commande suivante :
 
 ```bash
-az ad sp create-for-rbac --name "TerraformSP" --role="Contributor" --scopes="/subscriptions/YOUR_SUBSCRIPTION_ID"
+az ad sp create-for-rbac --name "TerraformSP" --role="Contributor" --scopes="/subscriptions/VOTRE_ID_ABONNEMENT"
 ```
 
-Replace `YOUR_SUBSCRIPTION_ID` with your actual Azure subscription ID.
+Remplacez `VOTRE_ID_ABONNEMENT` par votre véritable ID d'abonnement Azure.
 
-### Configuring Terraform with Environment Variables
+### Configuration de Terraform
 
-Ensure that the environment variables mentioned above are set before running `terraform init` or `terraform apply`. Terraform will automatically use these variables for authentication.
+Ajoutez le bloc suivant à votre fichier `main.tf`, en remplaçant les espaces réservés par les valeurs réelles obtenues lors de la création du principal de service :
 
-### Finding Your Tenant ID
+```hcl
+provider "azurerm" {
+  features {}
+  skip_provider_registration = true
 
-To find your Azure tenant ID, follow these steps:
+  subscription_id = "VOTRE_ID_ABONNEMENT" 
 
-1. Log in to the Azure portal.
-2. Navigate to Azure Active Directory.
-3. Look for the Directory ID under the Properties section. This is your tenant ID.
+}
+```
 
-Ensure that the service principal has permissions to the subscription and resources you intend to manage with Terraform.
-
-### License
+### Licence
 
 Copyright (c) 2024.
+
+---
