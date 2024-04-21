@@ -1,0 +1,6 @@
+.terraform/
+*.tfstate
+*.tfstate.*
+ssh/id_rsa
+ssh/id_rsa.pub
+.terraform.lock.hcl
